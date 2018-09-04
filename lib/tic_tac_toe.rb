@@ -48,13 +48,7 @@ def turn(board)
 end
 
 def turn_count(board)
-  counter = 0
-  board.each do|index|
-    if (index == "X" or index == "O")
-      counter += 1
-    end
-  end
-  counter
+  board.count{|cell| cell == "X" || cell == "O"}
 end
 
 def current_player(board)
@@ -67,14 +61,9 @@ def won?(board)
    else
      WIN_COMBINATIONS.each do |win_combination|
 
-        win_array  = win_combination.select {|index| (board[index] == "X")}
-        win_array2 = win_combination.select {|index| (board[index] == "O")}
-        if win_array.length == 3
-          return win_array
-        end
-        if win_array2.length == 3
-         return win_array2
-        end
+       if win_combination.all? {|cell| board[cell] == "X"} or win_combination.all? {|cell| board[cell] == "O"}
+         return win_combination
+       end
 
       end
       return false
@@ -100,13 +89,8 @@ def over?(board)
 end
 
 def winner(board)
-  array = won?(board)
-  if array != false
-    if board[array[0]] == "X"
-      return "X"
-    else
-      return "O"
-    end
+  if won?(board) != false
+    board[won?(board)[0]]
   end
 end
 
@@ -117,10 +101,8 @@ def play(board)
     turn(board)
   end
 
-  if winner(board) == "X"
-    puts "Congratulations X!"
-  elsif winner(board) == "O"
-    puts "Congratulations O!"
+  if winner(board) == "X" or winner(board) == "O"
+    puts "Congratulations #{winner(board)}!"
   else
     puts "Cat's Game!"
   end
