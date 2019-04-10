@@ -18,6 +18,7 @@ end
   #defintion of the move function
   def move(board, index, value="X")
       board[index] = value
+      return board
   end
   #CHECK FOR EMPTY spaces
   def position_taken?(board, index)
@@ -124,10 +125,19 @@ def over?(board)
   end
 end
 
-def winner(board)
-  if win_combination = won?(board)
-    board[win_combination.first]
+def winner
+  WIN_COMBINATIONS.detect do |element|
+    if @board[element[0]] == "X" && @board[element[1]] == "X" && @board[element[2]] == "X" && @board[element[3]] == "X"
+      return "X"
+    elsif  @board[element[0]] == "O" && @board[element[1]] == "O" && @board[element[2]] == "O" && @board[element[3]] == "O"
+      return "O"
+    else
+      return nil
+    end
   end
+  #if win_combination = won?(board)
+    #board[win_combination.first]
+  #end
 end
 
 #Define play method
@@ -135,9 +145,11 @@ def play(board)
   while !over?(board)
     turn(board)
   end
-  if won?(board)
-    puts " Congratulations #{winner(board)}! "
-  else draw?(board)
+  if winner == "X"
+    puts " Congratulations X! "
+  elsif  winner == "O"
+      puts " Congratulations O! "
+  else
     puts "Cat's Game!"
   end
 end
